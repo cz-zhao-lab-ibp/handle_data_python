@@ -1,5 +1,5 @@
 # hplc-plot
-Plotting script for shimadzu high-performance liquid chromatography
+Plotting script for Shimadzu high-performance liquid chromatography.
 
 ## Usage
 Input the folder name.
