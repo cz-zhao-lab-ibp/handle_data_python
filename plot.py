@@ -115,8 +115,8 @@ if __name__ == '__main__':
     input_files.insert(0, 'V/mL')
 
     df = pd.DataFrame(DF_TABLE, columns=input_files)
-    df.to_csv(result_file_path(folder_name, 'output_data.xlsx'),
-              sep='\t', index=False, header=True)
+    df.to_csv(result_file_path(folder_name, 'output_data.csv'),
+              sep=',', index=False, header=True)
 
     paintRaw(df)
     paintNorm(df)
