@@ -3,8 +3,7 @@ Plotting script for Shimadzu high-performance liquid chromatography.
 
 ## Usage
 Input the folder name.
-Multiple files for single-channel plotting.
-Single file for dual-channel plotting.
+Multiple files for single- and dual-channel plotting.
 
 ## Dependencies
 Python3 | Pandas | Matplotlib

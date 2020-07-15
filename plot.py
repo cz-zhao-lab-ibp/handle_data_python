@@ -21,17 +21,20 @@ def handleDataX(lineData):
     xyData = lineData.split('	')
     return float(xyData[1]) / 1000
 
-def data_file_path(__folder_name, __file_name = '__no_file'):
+
+def data_file_path(__folder_name, __file_name='__no_file'):
     if __file_name == '__no_file':
         return __folder_name + os.sep
-    else: 
+    else:
         return __folder_name + os.sep + os.sep + __file_name
 
-def result_file_path(__folder_name, __file_name = '__no_file'):
+
+def result_file_path(__folder_name, __file_name='__no_file'):
     if __file_name == '__no_file':
         return __folder_name + os.sep + 'result'
-    else: 
+    else:
         return __folder_name + os.sep + 'result' + os.sep + __file_name
+
 
 def fileHandler(path):
     with open(path, 'rt') as data:
@@ -56,7 +59,8 @@ def paintRaw(df):
     ax.set_ylabel("intensity")
     ax.xaxis.set_major_locator(MultipleLocator(2))
     plt.xlim(0, 24)  # 横轴左右边界
-    plt.savefig(result_file_path(folder_name,'raw_plt.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(result_file_path(folder_name, 'raw_plt.png'),
+                dpi=300, bbox_inches='tight')
 
 
 def paintNorm(df):
@@ -67,7 +71,8 @@ def paintNorm(df):
     ax.set_ylabel("percentage(%)")
     ax.xaxis.set_major_locator(MultipleLocator(2))
     plt.xlim(0, 24)  # 横轴左右边界
-    plt.savefig(result_file_path(folder_name,'norm_plt.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(result_file_path(folder_name, 'norm_plt.png'),
+                dpi=300, bbox_inches='tight')
 
 
 if __name__ == '__main__':
@@ -98,7 +103,8 @@ if __name__ == '__main__':
         for i in all_files:
             if i[-4:] == '.txt':
                 i_no_ext = i[0:-4]
-                shutil.copyfile(data_file_path(folder_name, i), data_file_path(folder_name, i_no_ext))
+                shutil.copyfile(data_file_path(folder_name, i),
+                                data_file_path(folder_name, i_no_ext))
                 input_files.append(i_no_ext)
         for legends in input_files:
             print(legends)
@@ -109,7 +115,8 @@ if __name__ == '__main__':
     input_files.insert(0, 'V/mL')
 
     df = pd.DataFrame(DF_TABLE, columns=input_files)
-    df.to_csv(result_file_path(folder_name, 'output_data.xlsx'), sep='\t', index=False, header=True)
+    df.to_csv(result_file_path(folder_name, 'output_data.xlsx'),
+              sep='\t', index=False, header=True)
 
     paintRaw(df)
     paintNorm(df)
@@ -117,6 +124,6 @@ if __name__ == '__main__':
     input_files.remove('V/mL')
 
     for j in input_files:
-        os.remove(data_file_path(folder_name,j))
+        os.remove(data_file_path(folder_name, j))
 
     exit()
