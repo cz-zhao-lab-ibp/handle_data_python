@@ -74,16 +74,23 @@ def norm(raw_list: list):
 
 
 def paint_raw(save_path, ch1, ch2, legend):
-
     plt.figure()
     _ch1_x = [_ch1[0] for _ch1 in ch1]
     _ch1_y = [_ch1[1] for _ch1 in ch1]
+    plt.plot(_ch1_x, _ch1_y, label=legend)
 
-    _ch2_x = [_ch2[0] for _ch2 in ch2]
-    _ch2_y = [_ch2[1] for _ch2 in ch2]
+    if ch2 != []:
+        plt.figure()
 
-    plt.plot(_ch1_x, _ch1_y, label=legend + ' (Channel 1)')
-    plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)')
+        _ch1_x = [_ch1[0] for _ch1 in ch1]
+        _ch1_y = [_ch1[1] for _ch1 in ch1]
+        plt.plot(_ch1_x, _ch1_y, label=legend + ' (Channel 1)')
+
+        _ch2_x = [_ch2[0] for _ch2 in ch2]
+        _ch2_y = [_ch2[1] for _ch2 in ch2]
+        plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)')
+    else:
+        pass
 
     plt.legend(loc='upper left')
 
@@ -99,12 +106,20 @@ def paint_norm(save_path, ch1, ch2, legend):
     plt.figure()
     _ch1_x = [_ch1[0] for _ch1 in ch1]
     _ch1_y = norm([_ch1[1] for _ch1 in ch1])
+    plt.plot(_ch1_x, _ch1_y, label=legend)
 
-    _ch2_x = [_ch2[0] for _ch2 in ch2]
-    _ch2_y = norm([_ch2[1] for _ch2 in ch2])
+    if ch2 != []:
+        plt.figure()
 
-    plt.plot(_ch1_x, _ch1_y, label=legend + ' (Channel 1)')
-    plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)')
+        _ch1_x = [_ch1[0] for _ch1 in ch1]
+        _ch1_y = norm([_ch1[1] for _ch1 in ch1])
+        plt.plot(_ch1_x, _ch1_y, label=legend + ' (Channel 1)')
+
+        _ch2_x = [_ch2[0] for _ch2 in ch2]
+        _ch2_y = norm([_ch2[1] for _ch2 in ch2])
+        plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)')
+    else:
+        pass
 
     plt.legend(loc='upper left')
 
@@ -160,11 +175,13 @@ if __name__ == '__main__':
             file_handler(data_path)
 
             ch1_df = pd.DataFrame(ch1_table)
-            ch2_df = pd.DataFrame(ch2_table)
             ch1_df.to_csv(result_file_path(folder_name, file_name +
                                            '-channel1_output_data.csv'), sep=',', index=False, header=True)
-            ch2_df.to_csv(result_file_path(folder_name, file_name +
-                                           '-channel2_output_data.csv'), sep=',', index=False, header=True)
+
+            if ch2_table != []:
+                ch2_df = pd.DataFrame(ch2_table)
+                ch2_df.to_csv(result_file_path(folder_name, file_name +
+                                            '-channel2_output_data.csv'), sep=',', index=False, header=True)
 
             paint_raw(result_file_path(folder_name, file_name +
                                        '-raw_plt.png'), ch1_table, ch2_table, file_name)
