@@ -6,7 +6,6 @@ import sys
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from matplotlib.pyplot import MultipleLocator
 
 GLO_RATIO = 0.5
 ch1_table = []
