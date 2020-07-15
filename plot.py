@@ -23,7 +23,7 @@ def handleDataX(lineData):
 
 def data_file_path(__folder_name, __file_name = '__no_file'):
     if __file_name == '__no_file':
-        return __folder_name + os.sep + 'result'
+        return __folder_name + os.sep
     else: 
         return __folder_name + os.sep + os.sep + __file_name
 
