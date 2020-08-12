@@ -68,7 +68,7 @@ def paintNorm(df):
     df_norm["V/mL"] = df["V/mL"]
     ax = df_norm.plot(x="V/mL", kind="line")
     ax.legend(loc="upper left")
-    ax.set_ylabel("percentage(%)")
+    ax.set_ylabel("Percentage(%)")
     ax.xaxis.set_major_locator(MultipleLocator(2))
     plt.xlim(0, 24)  # 横轴左右边界
     plt.savefig(result_file_path(folder_name, 'norm_plt.png'),
