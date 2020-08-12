@@ -10,6 +10,7 @@ import pandas as pd
 
 GLO_RATIO = 0.5
 
+
 def data_file_path(folder_name, file_name='_no_file'):
     return folder_name + os.sep + os.sep + file_name
 
@@ -68,12 +69,13 @@ def norm(raw_list: list):
     _list_max = max(raw_list)
     _list_min = min(raw_list)
 
-    _norm_list = [100 * (x - _list_min)/(_list_max - _list_min) for x in raw_list]
+    _norm_list = [100 * (x - _list_min)/(_list_max - _list_min)
+                  for x in raw_list]
 
     return _norm_list
 
 
-def paint(save_path, ch1, ch2, legend, normalize = 0):
+def paint(save_path, ch1, ch2, legend, normalize=0):
     _major_loc = MultipleLocator(5)
     _minor_loc = MultipleLocator(1)
 
@@ -99,7 +101,8 @@ def paint(save_path, ch1, ch2, legend, normalize = 0):
             _ch2_y = [_ch2[1] for _ch2 in ch2]
         else:
             _ch2_y = norm([_ch2[1] for _ch2 in ch2])
-        plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)', color='#DF5118')
+        plt.plot(_ch2_x, _ch2_y, label=legend +
+                 ' (Channel 2)', color='#DF5118')
     else:
         pass
 
@@ -111,6 +114,7 @@ def paint(save_path, ch1, ch2, legend, normalize = 0):
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
+
 
 if __name__ == '__main__':
     folder_name = input("Please input folder name (Dual channel): ")
@@ -163,12 +167,12 @@ if __name__ == '__main__':
             if ch2_table != []:
                 ch2_df = pd.DataFrame(ch2_table)
                 ch2_df.to_csv(result_file_path(folder_name, file_name +
-                                            '-channel2_output_data.csv'), sep=',', index=False, header=True)
+                                               '-channel2_output_data.csv'), sep=',', index=False, header=True)
 
             paint(result_file_path(folder_name, file_name +
-                                       '-raw_plt.png'), ch1_table, ch2_table, file_name, 0)
+                                   '-raw_plt.png'), ch1_table, ch2_table, file_name, 0)
             paint(result_file_path(folder_name, file_name +
-                                        '-normalized_plt.png'), ch1_table, ch2_table, file_name, 1)
+                                   '-normalized_plt.png'), ch1_table, ch2_table, file_name, 1)
 
     remove_file_path(input_files)
 
