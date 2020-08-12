@@ -5,10 +5,10 @@ import shutil
 import sys
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 import pandas as pd
 
 GLO_RATIO = 0.5
-
 
 def data_file_path(folder_name, file_name='_no_file'):
     return folder_name + os.sep + os.sep + file_name
@@ -68,68 +68,49 @@ def norm(raw_list: list):
     _list_max = max(raw_list)
     _list_min = min(raw_list)
 
-    _norm_list = [(x - _list_min)/(_list_max - _list_min) for x in raw_list]
+    _norm_list = [100 * (x - _list_min)/(_list_max - _list_min) for x in raw_list]
 
     return _norm_list
 
 
-def paint_raw(save_path, ch1, ch2, legend):
+def paint(save_path, ch1, ch2, legend, normalize = 0):
+    _major_loc = MultipleLocator(5)
+    _minor_loc = MultipleLocator(1)
+
     plt.figure()
     _ch1_x = [_ch1[0] for _ch1 in ch1]
-    _ch1_y = [_ch1[1] for _ch1 in ch1]
-    plt.plot(_ch1_x, _ch1_y, label=legend)
 
-    if ch2 != []:
-        plt.figure()
+    plt.xlabel('V/mL')
+    plt.xlim(0, 24)  # 横轴左右边界
 
-        _ch1_x = [_ch1[0] for _ch1 in ch1]
+    if normalize == 0:
+        plt.ylabel('Intensity')
         _ch1_y = [_ch1[1] for _ch1 in ch1]
-        plt.plot(_ch1_x, _ch1_y, label=legend + ' (Channel 1)')
-
-        _ch2_x = [_ch2[0] for _ch2 in ch2]
-        _ch2_y = [_ch2[1] for _ch2 in ch2]
-        plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)')
     else:
-        pass
+        plt.ylabel('Percentage(%)')
+        _ch1_y = norm([_ch1[1] for _ch1 in ch1])
 
-    plt.legend(loc='upper left')
-
-    plt.ylabel('Intensity')
-    plt.xlabel('V/mL')
-    plt.xlim(0, 24)  # 横轴左右边界
-
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    plt.close()
-
-
-def paint_norm(save_path, ch1, ch2, legend):
-    plt.figure()
-    _ch1_x = [_ch1[0] for _ch1 in ch1]
-    _ch1_y = norm([_ch1[1] for _ch1 in ch1])
-    plt.plot(_ch1_x, _ch1_y, label=legend)
+    plt.plot(_ch1_x, _ch1_y, label=legend + ' (Channel 1)', color='#14D005')
 
     if ch2 != []:
-        plt.figure()
-
-        _ch1_x = [_ch1[0] for _ch1 in ch1]
-        _ch1_y = norm([_ch1[1] for _ch1 in ch1])
-        plt.plot(_ch1_x, _ch1_y, label=legend + ' (Channel 1)')
-
         _ch2_x = [_ch2[0] for _ch2 in ch2]
-        _ch2_y = norm([_ch2[1] for _ch2 in ch2])
-        plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)')
+
+        if normalize == 0:
+            _ch2_y = [_ch2[1] for _ch2 in ch2]
+        else:
+            _ch2_y = norm([_ch2[1] for _ch2 in ch2])
+        plt.plot(_ch2_x, _ch2_y, label=legend + ' (Channel 2)', color='#DF5118')
     else:
         pass
 
     plt.legend(loc='upper left')
 
-    plt.ylabel('Percentage (%)')
-    plt.xlabel('V/mL')
-    plt.xlim(0, 24)  # 横轴左右边界
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(_major_loc)
+    ax.xaxis.set_minor_locator(_minor_loc)
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
-
 
 if __name__ == '__main__':
     folder_name = input("Please input folder name (Dual channel): ")
@@ -147,7 +128,7 @@ if __name__ == '__main__':
         if os.path.exists(result_file_path(folder_name)):
             continue_process = input(
                 'WARNING: Result folder already exists, input Y to overwrite: ')
-            if continue_process == 'Y':
+            if continue_process == 'Y' or 'y':
                 shutil.rmtree(folder_path)
             else:
                 print("Exiting...")
@@ -170,6 +151,7 @@ if __name__ == '__main__':
             print(file_name)
             ch1_table = []
             ch2_table = []
+            norm_ch2_table = []
 
             data_path = os.path.abspath(folder_name + os.sep + file_name)
             file_handler(data_path)
@@ -183,10 +165,10 @@ if __name__ == '__main__':
                 ch2_df.to_csv(result_file_path(folder_name, file_name +
                                             '-channel2_output_data.csv'), sep=',', index=False, header=True)
 
-            paint_raw(result_file_path(folder_name, file_name +
-                                       '-raw_plt.png'), ch1_table, ch2_table, file_name)
-            paint_norm(result_file_path(folder_name, file_name +
-                                        '-normalized_plt.png'), ch1_table, ch2_table, file_name)
+            paint(result_file_path(folder_name, file_name +
+                                       '-raw_plt.png'), ch1_table, ch2_table, file_name, 0)
+            paint(result_file_path(folder_name, file_name +
+                                        '-normalized_plt.png'), ch1_table, ch2_table, file_name, 1)
 
     remove_file_path(input_files)
 
