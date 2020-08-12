@@ -1,6 +1,0 @@
-.vscode
-*.code-workspace
-.DS_Store
-*/.DS_Store
-result
-plain_data/*.txt
