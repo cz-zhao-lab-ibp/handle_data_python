@@ -96,7 +96,7 @@ def paint(save_path, gfp, mcherry, a280, legend, normalize=0):
     plt.figure()
 
     plt.xlabel('V/mL')
-    plt.xlim(2, 24)  # 横轴左右边界
+    plt.xlim(2, 24)
 
     if normalize == 0:
         plt.ylabel('Absorbance')
